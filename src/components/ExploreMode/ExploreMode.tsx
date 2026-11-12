@@ -35,7 +35,7 @@ const directionIcons = {
 // Verified obstacle-free ground spawn coordinates for each station
 const STATION_SPAWN_COORDS: Record<string, { x: number; y: number; scale: number; facing: 'away' | 'left' | 'right' | 'towards' }> = {
   entrance: { x: 50, y: 92, scale: 1.0, facing: 'away' },
-  reception: { x: 22, y: 88, scale: 0.95, facing: 'away' },
+  reception: { x: 58, y: 95, scale: 1.0, facing: 'away' },
   restaurant_exterior: { x: 58, y: 95, scale: 1.0, facing: 'away' },
   restaurant_dining: { x: 45, y: 90, scale: 0.95, facing: 'away' },
   pool: { x: 8, y: 84, scale: 0.95, facing: 'away' },
@@ -45,13 +45,24 @@ const STATION_SPAWN_COORDS: Record<string, { x: number; y: number; scale: number
   spa: { x: 16, y: 92, scale: 0.95, facing: 'away' }
 };
 
+// Verified obstacle-free ground spawn coordinates for specific sub-locations
+const SUB_SPAWN_COORDS: Record<string, { x: number; y: number; scale: number; facing: 'away' | 'left' | 'right' | 'towards' }> = {
+  'reception/front_view': { x: 58, y: 95, scale: 1.0, facing: 'away' },
+  'reception/desk': { x: 22, y: 88, scale: 0.95, facing: 'away' },
+  'restaurant_dining/foyer': { x: 50, y: 92, scale: 0.95, facing: 'away' },
+  'restaurant_dining/dining': { x: 45, y: 90, scale: 0.95, facing: 'away' },
+  'restaurant_dining/kitchen': { x: 48, y: 92, scale: 0.95, facing: 'away' },
+  'restaurant_dining/outdoor': { x: 52, y: 94, scale: 1.0, facing: 'away' },
+  'cottages/exterior': { x: 48, y: 94, scale: 1.0, facing: 'away' },
+  'cottages/interior': { x: 50, y: 92, scale: 0.95, facing: 'away' },
+};
+
 // Station connectivity graph for multi-station route planning
 const STATION_ADJACENCY: Record<string, string[]> = {
   entrance: ['reception', 'cottages'],
-  reception: ['entrance', 'restaurant_exterior', 'pool'],
-  restaurant_exterior: ['reception', 'restaurant_dining', 'pool'],
-  restaurant_dining: ['restaurant_exterior', 'pool'],
-  pool: ['reception', 'restaurant_exterior', 'cottages', 'spa'],
+  reception: ['entrance', 'restaurant_dining', 'pool'],
+  restaurant_dining: ['reception', 'pool'],
+  pool: ['reception', 'restaurant_dining', 'cottages', 'spa'],
   cottages: ['entrance', 'pool', 'garden'],
   garden: ['cottages', 'pool', 'adventure'],
   adventure: ['garden', 'spa'],
@@ -182,7 +193,7 @@ function computeRoadRibbon(
 
 export const ExploreMode: React.FC<ExploreModeProps> = ({
   initialLocationId = 'entrance',
-  initialDestinationId = 'restaurant_exterior',
+  initialDestinationId = 'restaurant_dining',
   onExit,
   onSelectOnParkMap
 }) => {
@@ -194,7 +205,7 @@ export const ExploreMode: React.FC<ExploreModeProps> = ({
   const [isAudioPlaying, setIsAudioPlaying] = useState<boolean>(false);
 
   // Compact right-side destination panel state
-  const [selectedDestinationId, setSelectedDestinationId] = useState<string>(initialDestinationId || 'restaurant_exterior');
+  const [selectedDestinationId, setSelectedDestinationId] = useState<string>(initialDestinationId || 'restaurant_dining');
   const [isPanelCollapsed, setIsPanelCollapsed] = useState<boolean>(false);
   const [lastArrivedStation, setLastArrivedStation] = useState<string | null>(null);
 
@@ -518,7 +529,8 @@ export const ExploreMode: React.FC<ExploreModeProps> = ({
           setCurrentLocationId(nextLocId);
           setCurrentSubId(hs.targetSubId || null);
 
-          const newSpawn = STATION_SPAWN_COORDS[nextLocId] || { x: 50, y: 92, scale: 1.0, facing: 'away' };
+          const subKey = hs.targetSubId ? `${nextLocId}/${hs.targetSubId}` : nextLocId;
+          const newSpawn = SUB_SPAWN_COORDS[subKey] || STATION_SPAWN_COORDS[nextLocId] || { x: 50, y: 92, scale: 1.0, facing: 'away' };
 
           setTimeout(() => {
             setIsCrossFading(false);
@@ -548,7 +560,8 @@ export const ExploreMode: React.FC<ExploreModeProps> = ({
       cancelAnimationFrame(animFrameRef.current);
       animFrameRef.current = null;
     }
-    const newSpawn = STATION_SPAWN_COORDS[locId] || { x: 50, y: 92, scale: 1.0, facing: 'away' };
+    const subKey = subId ? `${locId}/${subId}` : locId;
+    const newSpawn = SUB_SPAWN_COORDS[subKey] || STATION_SPAWN_COORDS[locId] || { x: 50, y: 92, scale: 1.0, facing: 'away' };
     setLastArrivedStation(null);
     setWalkState({
       isActive: false,
@@ -649,7 +662,21 @@ export const ExploreMode: React.FC<ExploreModeProps> = ({
               return (
                 <button
                   key={sub.id}
-                  onClick={() => setCurrentSubId(sub.id)}
+                  onClick={() => {
+                    setCurrentSubId(sub.id);
+                    const subKey = `${loc.id}/${sub.id}`;
+                    const spawn = SUB_SPAWN_COORDS[subKey] || (sub.hotspots?.[0]?.walkWaypoints?.[0]) || STATION_SPAWN_COORDS[loc.id];
+                    if (spawn) {
+                      setWalkState((prev) => ({
+                        ...prev,
+                        currentX: spawn.x,
+                        currentY: spawn.y,
+                        currentScale: spawn.scale ?? 1.0,
+                        currentFacing: spawn.facing ?? 'away',
+                        trailPoints: [],
+                      }));
+                    }
+                  }}
                   className={`px-3 py-1 rounded-full text-xs font-semibold transition-all whitespace-nowrap cursor-pointer ${
                     isSubActive
                       ? 'bg-[#28e070] text-black shadow-md font-bold'

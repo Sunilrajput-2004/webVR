@@ -53,8 +53,9 @@ export const exploreLocations: ExploreLocation[] = [
       {
         id: 'h-ent-rec',
         targetLocationId: 'reception',
-        label: 'Welcome Reception & Lounge',
-        actionText: 'Follow paved driveway through archway to Reception',
+        targetSubId: 'front_view',
+        label: 'The Forest Pavilion — Front View',
+        actionText: 'Follow paved driveway through archway to Front View',
         x: 60,
         y: 60,
         direction: 'forward',
@@ -87,77 +88,99 @@ export const exploreLocations: ExploreLocation[] = [
   },
   {
     id: 'reception',
-    name: 'Welcome Reception & Concierge',
-    badge: 'Front Desk & Lounge',
+    name: 'Welcome Reception & Front View',
+    badge: 'Front View & Concierge',
     category: 'welcome',
-    defaultImage: '/assets/reception.jpg',
-    description: 'High vaulted timber ceilings, warm ambient cove lighting, and solid wood & granite check-in counter.',
-    longDescription: 'Step into the tranquil arrival sanctuary with plush neutral lounge seating, hand-carved coffee tables, and floor-to-ceiling glass windows framing the lush green forest canopy.',
-    mapCoords: { x: 34, y: 72 },
-    hotspots: [
-      {
-        id: 'h-rec-res',
-        targetLocationId: 'restaurant_exterior',
-        label: 'The Forest Pavilion Restaurant',
-        actionText: 'Walk along stone-tile aisle to Restaurant Pavilion',
-        x: 52,
-        y: 57,
-        direction: 'right',
-        walkWaypoints: [
-          { x: 22, y: 88, scale: 0.95, facing: 'away' },
-          { x: 24, y: 78, scale: 0.82, facing: 'away' },
-          { x: 34, y: 68, scale: 0.70, facing: 'right' },
-          { x: 44, y: 62, scale: 0.60, facing: 'right' },
-          { x: 52, y: 57, scale: 0.50, facing: 'away' }
-        ]
-      },
-      {
-        id: 'h-rec-pool',
-        targetLocationId: 'pool',
-        label: 'Crystal Swimming Pool',
-        actionText: 'Follow terrace tile corridor to the Swimming Pool',
-        x: 14,
-        y: 64,
-        direction: 'left',
-        walkWaypoints: [
-          { x: 22, y: 88, scale: 0.95, facing: 'away' },
-          { x: 20, y: 78, scale: 0.82, facing: 'left' },
-          { x: 18, y: 70, scale: 0.70, facing: 'left' },
-          { x: 14, y: 64, scale: 0.58, facing: 'away' }
-        ]
-      },
-      {
-        id: 'h-rec-ent',
-        targetLocationId: 'entrance',
-        label: 'Main Entrance Gate',
-        actionText: 'Return along walkway to Main Arrival Gate',
-        x: 18,
-        y: 88,
-        direction: 'back',
-        walkWaypoints: [
-          { x: 22, y: 88, scale: 0.95, facing: 'towards' },
-          { x: 20, y: 92, scale: 1.0, facing: 'towards' },
-          { x: 18, y: 98, scale: 1.08, facing: 'towards' }
-        ]
-      }
-    ]
-  },
-  {
-    id: 'restaurant_exterior',
-    name: 'The Forest Pavilion — Exterior Deck',
-    badge: 'Dining Pavilion',
-    category: 'dining',
     defaultImage: '/assets/restaurant_exterior.jpg',
     description: 'Contemporary cedar timber and steel pavilion architecture surrounded by tropical rainforest canopy.',
-    longDescription: 'Features an open-air wooden arrival deck illuminated by ambient warm ground lanterns, floor-to-ceiling glass walls showcasing interior dining tables, and forest breezes.',
-    mapCoords: { x: 49, y: 27 },
+    longDescription: 'Features an open-air wooden arrival deck illuminated by ambient warm ground lanterns, leading to the Welcome Reception sanctuary, swimming pool boardwalk, and arrival gate.',
+    mapCoords: { x: 34, y: 72 },
+    subLocations: [
+      {
+        id: 'front_view',
+        name: 'Front View',
+        tabLabel: 'Front View',
+        image: '/assets/restaurant_exterior.jpg',
+        description: 'Open-air wooden arrival deck illuminated by ambient warm ground lanterns with pathways to Reception, Pool, and Main Entrance.',
+        hotspots: [
+          {
+            id: 'h-front-rec',
+            targetLocationId: 'reception',
+            targetSubId: 'desk',
+            label: 'Welcome Reception & Concierge',
+            actionText: 'Step into the Welcome Reception sanctuary',
+            x: 66,
+            y: 68,
+            direction: 'forward',
+            walkWaypoints: [
+              { x: 58, y: 95, scale: 1.0, facing: 'away' },
+              { x: 60, y: 84, scale: 0.85, facing: 'away' },
+              { x: 65, y: 76, scale: 0.70, facing: 'away' },
+              { x: 66, y: 68, scale: 0.52, facing: 'away' }
+            ]
+          },
+          {
+            id: 'h-front-pool',
+            targetLocationId: 'pool',
+            label: 'Crystal Swimming Pool',
+            actionText: 'Follow outdoor boardwalk around pavilion to the Pool',
+            x: 80,
+            y: 65,
+            direction: 'right',
+            walkWaypoints: [
+              { x: 58, y: 95, scale: 1.0, facing: 'away' },
+              { x: 62, y: 84, scale: 0.85, facing: 'right' },
+              { x: 70, y: 78, scale: 0.72, facing: 'right' },
+              { x: 76, y: 72, scale: 0.62, facing: 'away' },
+              { x: 80, y: 65, scale: 0.52, facing: 'away' }
+            ]
+          },
+          {
+            id: 'h-front-ent',
+            targetLocationId: 'entrance',
+            label: 'Main Entrance Gate',
+            actionText: 'Return along walkway to Main Arrival Gate',
+            x: 54,
+            y: 98,
+            direction: 'back',
+            walkWaypoints: [
+              { x: 58, y: 95, scale: 1.0, facing: 'towards' },
+              { x: 56, y: 98, scale: 1.08, facing: 'towards' }
+            ]
+          }
+        ]
+      },
+      {
+        id: 'desk',
+        name: 'Reception Desk',
+        tabLabel: 'Reception Desk',
+        image: '/assets/reception.jpg',
+        description: 'High vaulted timber ceilings, warm ambient cove lighting, and solid wood & granite check-in counter.',
+        hotspots: [
+          {
+            id: 'h-desk-out',
+            targetLocationId: 'reception',
+            targetSubId: 'front_view',
+            label: 'Exit to Front View',
+            actionText: 'Step outside back to the Pavilion Front Deck',
+            x: 20,
+            y: 95,
+            direction: 'back',
+            walkWaypoints: [
+              { x: 22, y: 88, scale: 0.95, facing: 'towards' },
+              { x: 20, y: 95, scale: 1.08, facing: 'towards' }
+            ]
+          }
+        ]
+      }
+    ],
     hotspots: [
       {
-        id: 'h-rext-din',
-        targetLocationId: 'restaurant_dining',
-        targetSubId: 'foyer',
-        label: 'Wine Foyer & Host Entrance',
-        actionText: 'Step inside through the glass entrance doors',
+        id: 'h-front-rec',
+        targetLocationId: 'reception',
+        targetSubId: 'desk',
+        label: 'Welcome Reception & Concierge',
+        actionText: 'Step into the Welcome Reception sanctuary',
         x: 66,
         y: 68,
         direction: 'forward',
@@ -169,9 +192,9 @@ export const exploreLocations: ExploreLocation[] = [
         ]
       },
       {
-        id: 'h-rext-pool',
+        id: 'h-front-pool',
         targetLocationId: 'pool',
-        label: 'Swimming Pool Deck',
+        label: 'Crystal Swimming Pool',
         actionText: 'Follow outdoor boardwalk around pavilion to the Pool',
         x: 80,
         y: 65,
@@ -185,10 +208,10 @@ export const exploreLocations: ExploreLocation[] = [
         ]
       },
       {
-        id: 'h-rext-rec',
-        targetLocationId: 'reception',
-        label: 'Welcome Reception',
-        actionText: 'Return along wooden bridge to Welcome Reception',
+        id: 'h-front-ent',
+        targetLocationId: 'entrance',
+        label: 'Main Entrance Gate',
+        actionText: 'Return along walkway to Main Arrival Gate',
         x: 54,
         y: 98,
         direction: 'back',
@@ -201,7 +224,7 @@ export const exploreLocations: ExploreLocation[] = [
   },
   {
     id: 'restaurant_dining',
-    name: 'The Forest Pavilion — Grand Dining Hall',
+    name: 'Grand Dining Hall — Fine Dining & Kitchen',
     badge: 'Fine Dining & Kitchen',
     category: 'dining',
     defaultImage: '/assets/restaurant_dining.jpg',
@@ -235,8 +258,9 @@ export const exploreLocations: ExploreLocation[] = [
           },
           {
             id: 'h-foy-rext',
-            targetLocationId: 'restaurant_exterior',
-            label: 'Return to Exterior Deck',
+            targetLocationId: 'reception',
+            targetSubId: 'front_view',
+            label: 'Return to Front View',
             actionText: 'Walk back out to arrival deck',
             x: 18,
             y: 74,
@@ -398,9 +422,10 @@ export const exploreLocations: ExploreLocation[] = [
           },
           {
             id: 'h-out-rext',
-            targetLocationId: 'restaurant_exterior',
-            label: 'Return to Arrival Deck',
-            actionText: 'Walk back to main pavilion exterior',
+            targetLocationId: 'reception',
+            targetSubId: 'front_view',
+            label: 'Return to Front View',
+            actionText: 'Walk back out to arrival deck',
             x: 16,
             y: 72,
             direction: 'back',
@@ -431,8 +456,9 @@ export const exploreLocations: ExploreLocation[] = [
       },
       {
         id: 'h-din-rext',
-        targetLocationId: 'restaurant_exterior',
-        label: 'Restaurant Exterior',
+        targetLocationId: 'reception',
+        targetSubId: 'front_view',
+        label: 'Return to Front View',
         actionText: 'Return to Exterior Arrival Deck',
         x: 12,
         y: 72,
@@ -490,9 +516,10 @@ export const exploreLocations: ExploreLocation[] = [
       },
       {
         id: 'h-pool-res',
-        targetLocationId: 'restaurant_exterior',
-        label: 'Restaurant Pavilion',
-        actionText: 'Follow teak deck around pool to Restaurant Pavilion',
+        targetLocationId: 'restaurant_dining',
+        targetSubId: 'foyer',
+        label: 'Grand Dining Hall',
+        actionText: 'Follow teak deck around pool to Grand Dining Hall',
         x: 62,
         y: 52,
         direction: 'back',
@@ -557,6 +584,32 @@ export const exploreLocations: ExploreLocation[] = [
               { x: 44, y: 72, scale: 0.62, facing: 'right' },
               { x: 52, y: 68, scale: 0.52, facing: 'away' }
             ]
+          },
+          {
+            id: 'h-cot-ent',
+            targetLocationId: 'entrance',
+            label: 'Main Entrance Gate',
+            actionText: 'Return along walkway to Main Arrival Gate',
+            x: 44,
+            y: 98,
+            direction: 'back',
+            walkWaypoints: [
+              { x: 48, y: 94, scale: 1.0, facing: 'towards' },
+              { x: 44, y: 98, scale: 1.08, facing: 'towards' }
+            ]
+          },
+          {
+            id: 'h-cot-pool',
+            targetLocationId: 'pool',
+            label: 'Crystal Swimming Pool',
+            actionText: 'Follow flagstones back to the Swimming Pool',
+            x: 52,
+            y: 98,
+            direction: 'back',
+            walkWaypoints: [
+              { x: 48, y: 94, scale: 1.0, facing: 'towards' },
+              { x: 52, y: 98, scale: 1.08, facing: 'towards' }
+            ]
           }
         ]
       },
@@ -603,16 +656,29 @@ export const exploreLocations: ExploreLocation[] = [
         ]
       },
       {
-        id: 'h-cot-pool',
-        targetLocationId: 'pool',
-        label: 'Swimming Pool',
-        actionText: 'Follow flagstones back to the Swimming Pool',
-        x: 54,
+        id: 'h-cot-ent',
+        targetLocationId: 'entrance',
+        label: 'Main Entrance Gate',
+        actionText: 'Return along walkway to Main Arrival Gate',
+        x: 44,
         y: 98,
         direction: 'back',
         walkWaypoints: [
           { x: 48, y: 94, scale: 1.0, facing: 'towards' },
-          { x: 50, y: 98, scale: 1.08, facing: 'towards' }
+          { x: 44, y: 98, scale: 1.08, facing: 'towards' }
+        ]
+      },
+      {
+        id: 'h-cot-pool',
+        targetLocationId: 'pool',
+        label: 'Crystal Swimming Pool',
+        actionText: 'Follow flagstones back to the Swimming Pool',
+        x: 52,
+        y: 98,
+        direction: 'back',
+        walkWaypoints: [
+          { x: 48, y: 94, scale: 1.0, facing: 'towards' },
+          { x: 52, y: 98, scale: 1.08, facing: 'towards' }
         ]
       }
     ]
